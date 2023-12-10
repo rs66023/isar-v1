@@ -10,13 +10,13 @@ import Home from './Components/Home';
 import About from './Components/About';
 
 // Importing dashboard components
-import ActionRequiredIndicator from './components/ActionRequiredIndicator/ActionRequiredIndicator';
-import AltitudeChart from './components/AltitudeChart/AltitudeChart';
-import AscentDescentIndicator from './components/AscentDescentIndicator/AscentDescentIndicator';
-import RefreshButton from './components/RefreshButton/RefreshButton';
-import StatusMessage from './components/StatusMessage/StatusMessage';
-import TemperatureGauge from './components/TemperatureGauge/TemperatureGauge';
-import VelocityChart from './components/VelocityChart/VelocityChart';
+import ActionRequiredIndicator from './Components/ActionRequiredIndicator/ActionRequiredIndicator';
+import AltitudeChart from './Components/AltitudeChart/AltitudeChart';
+import AscentDescentIndicator from './Components/AscentDescentIndicator/AscentDescentIndicator';
+import RefreshButton from './Components/RefreshButton/RefreshButton';
+import StatusMessage from './Components/StatusMessage/StatusMessage';
+import TemperatureGauge from './Components/TemperatureGauge/TemperatureGauge';
+import VelocityChart from './Components/VelocityChart/VelocityChart';
 
 function App() {
   // State to store sensor data
@@ -33,11 +33,12 @@ function App() {
   useEffect(() => { 
     const fetchData = async () => { 
       try {
-        const response = await fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumStatus', {
-          method: 'GET', 
-        });
+        const response = await fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumStatus');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        setSensorData(data); 
+        setSensorData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -47,27 +48,48 @@ function App() {
   }, []); // Empty dependency array to run only once
 
 
+  // Add a new state variable for tracking loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Modify fetchData to set isLoading to true when it starts fetching and to false when it finishes
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumStatus');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setSensorData(data);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // In your component, conditionally render a loading message if isLoading is true
   return (
     <Router>
-      <div>
+      <div className="App">
         <Routes>
-          {/* Route for the About page */}
-          <Route path="/about" element={<About />} />
-          
-          {/* Route for the Home page */}
           <Route path="/" element={
-          <Home>
-            <div className="dashboard">
-             {/* Pass sensor data as props to components */}
-             <VelocityChart velocity={sensorData.velocity} />
-             <AltitudeChart altitude={sensorData.altitude} />
-             <TemperatureGauge temperature={sensorData.temperature} />
-             <StatusMessage statusMessage={sensorData.statusMessage} />
-             <AscentDescentIndicator isAscending={sensorData.isAscending} />
-             <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
-             <RefreshButton onRefresh={fetchData} />
-            </div>
-          </Home>
+            <Home>
+              <div className="sensor-data">
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <>
+                    <AltitudeChart altitude={sensorData.altitude} />
+                    <TemperatureGauge temperature={sensorData.temperature} />
+                    <StatusMessage statusMessage={sensorData.statusMessage} />
+                    <AscentDescentIndicator isAscending={sensorData.isAscending} />
+                    <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+                    <RefreshButton onRefresh={fetchData} />
+                  </>
+                )}
+              </div>
+            </Home>
           } />
         </Routes>
       </div>
@@ -77,3 +99,4 @@ function App() {
 
 
 export default App;
+
