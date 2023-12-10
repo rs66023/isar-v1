@@ -57,14 +57,16 @@ function App() {
           {/* Route for the Home page */}
           <Route path="/" element={
           <Home>
-            {/* Pass sensor data as props to components */}
-            <VelocityChart velocity={sensorData.velocity} />
-            <AltitudeChart altitude={sensorData.altitude} />
-            <TemperatureGauge temperature={sensorData.temperature} />
-            <StatusMessage statusMessage={sensorData.statusMessage} />
-            <AscentDescentIndicator isAscending={sensorData.isAscending} />
-            <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
-            <RefreshButton onRefresh={fetchData} />
+            <div className="dashboard">
+             {/* Pass sensor data as props to components */}
+             <VelocityChart velocity={sensorData.velocity} />
+             <AltitudeChart altitude={sensorData.altitude} />
+             <TemperatureGauge temperature={sensorData.temperature} />
+             <StatusMessage statusMessage={sensorData.statusMessage} />
+             <AscentDescentIndicator isAscending={sensorData.isAscending} />
+             <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+             <RefreshButton onRefresh={fetchData} />
+            </div>
           </Home>
           } />
         </Routes>
