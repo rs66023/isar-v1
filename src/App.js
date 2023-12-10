@@ -5,13 +5,18 @@ import './App.css';
 import React, { useState, useEffect } from 'react';  // useState and useEffect added for state management and side effects
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+// Importing custom components
 import Home from './Components/Home';
 import About from './Components/About';
 
-// Importing custom components
-
-
 // Importing dashboard components
+import ActionRequiredIndicator from './components/ActionRequiredIndicator/ActionRequiredIndicator';
+import AltitudeChart from './components/AltitudeChart/AltitudeChart';
+import AscentDescentIndicator from './components/AscentDescentIndicator/AscentDescentIndicator';
+import RefreshButton from './components/RefreshButton/RefreshButton';
+import StatusMessage from './components/StatusMessage/StatusMessage';
+import TemperatureGauge from './components/TemperatureGauge/TemperatureGauge';
+import VelocityChart from './components/VelocityChart/VelocityChart';
 
 function App() {
   // State to store sensor data
@@ -55,7 +60,11 @@ function App() {
             {/* Pass sensor data as props to components */}
             <VelocityChart velocity={sensorData.velocity} />
             <AltitudeChart altitude={sensorData.altitude} />
-            {/* ... other components with their respective props */}
+            <TemperatureGauge temperature={sensorData.temperature} />
+            <StatusMessage statusMessage={sensorData.statusMessage} />
+            <AscentDescentIndicator isAscending={sensorData.isAscending} />
+            <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+            <RefreshButton onRefresh={fetchData} />
           </Home>
           } />
         </Routes>
