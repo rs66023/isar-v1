@@ -24,34 +24,12 @@ function App() {
     velocity: 0,
     altitude: 0,
     temperature: 0,
-    statusMessage: '',
+    statusMessage: 'Waiting for data',
     isAscending: false,
     isActionRequired: false,
-  }); 
+  });
 
-  // Effect to fetch sensor data from the API
-  useEffect(() => { 
-    const fetchData = async () => { 
-      try {
-        const response = await fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumStatus');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setSensorData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData(); // Execute the fetch operation
-  }, []); // Empty dependency array to run only once
-
-
-  // Add a new state variable for tracking loading state
   const [isLoading, setIsLoading] = useState(false);
-
-  // Modify fetchData to set isLoading to true when it starts fetching and to false when it finishes
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -68,28 +46,32 @@ function App() {
     }
   };
 
+  // Implementing polling for real-time updates
+  useEffect(() => {
+    fetchData();
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000); // Adjust interval as needed
+
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, []);
+
   // In your component, conditionally render a loading message if isLoading is true
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={
-            <Home>
+          <Route path="/" element={ 
               <div className="sensor-data">
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : (
-                  <>
-                    <AltitudeChart altitude={sensorData.altitude} />
-                    <TemperatureGauge temperature={sensorData.temperature} />
-                    <StatusMessage statusMessage={sensorData.statusMessage} />
-                    <AscentDescentIndicator isAscending={sensorData.isAscending} />
-                    <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
-                    <RefreshButton onRefresh={fetchData} />
-                  </>
-                )}
+                <StatusMessage statusMessage={sensorData.statusMessage} />
+                <AltitudeChart altitude={sensorData.altitude} />
+                <VelocityChart velocity={sensorData.velocity} />
+                <TemperatureGauge temperature={sensorData.temperature} />
+                <AscentDescentIndicator isAscending={sensorData.isAscending} />
+                <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+                <RefreshButton onRefresh={fetchData} />
               </div>
-            </Home>
           } />
         </Routes>
       </div>

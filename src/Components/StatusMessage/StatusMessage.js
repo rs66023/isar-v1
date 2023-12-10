@@ -1,10 +1,11 @@
 import React from 'react';
+import './StatusMessage.css';
 
 function StatusMessage({ statusMessage }) {
   return (
     <div className="status-message">
-      <h2>Status Message</h2>
-      <p>{statusMessage}</p> {/* Display the status message */}
+      <h2>Status</h2>
+      <p>{statusMessage}</p>
     </div>
   );
 }
