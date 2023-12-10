@@ -1,10 +1,9 @@
 import React from 'react';
-import './StatusMessage.css';
+import './StatusMessage.css'; // CSS file for styling
 
 function StatusMessage({ statusMessage }) {
   return (
     <div className="status-message">
-      <h2>Status</h2>
       <p>{statusMessage}</p>
     </div>
   );

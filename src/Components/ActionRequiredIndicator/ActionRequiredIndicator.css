@@ -1,0 +1,19 @@
+.action-required-indicator {
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 10px;
+  }
+  
+  .action-required-indicator.active {
+    background-color: var(--danger-color);
+    color: white;
+    animation: blink 1s linear infinite;
+  }
+  
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }

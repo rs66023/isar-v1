@@ -1,10 +1,10 @@
 import React from 'react';
+import './ActionRequiredIndicator.css'; // CSS file for styling
 
 function ActionRequiredIndicator({ isActionRequired }) {
   return (
-    <div>
-      <h2>Action Required</h2>
-      <p>{isActionRequired ? 'Yes' : 'No'}</p>
+    <div className={`action-required-indicator ${isActionRequired ? 'active' : ''}`}>
+      {isActionRequired ? 'Action Required!' : 'No Action Required'}
     </div>
   );
 }

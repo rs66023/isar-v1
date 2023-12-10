@@ -1,3 +1,18 @@
+:root {
+  --primary-color: #007bff; /* Primary color */
+  --secondary-color: #6c757d; /* Secondary color */
+  --background-color: #f8f9fa; /* Light background color */
+  --text-color: #343a40; /* Text color */
+  --success-color: #28a745; /* For positive indicators */
+  --danger-color: #dc3545; /* For warnings or alerts */
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Arial', sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +50,33 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.dashboard-container {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+.top-bar {
+  grid-column: 1 / -1;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.bottom {
+  grid-column: 1 / -1;
+}
+
+.mid-section {
+  display: contents;
+}
+
+.mid-right, .mid-left {
+
 }

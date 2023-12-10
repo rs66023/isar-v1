@@ -63,14 +63,22 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={ 
-              <div className="sensor-data">
-                <StatusMessage statusMessage={sensorData.statusMessage} />
-                <AltitudeChart altitude={sensorData.altitude} />
-                <VelocityChart velocity={sensorData.velocity} />
-                <TemperatureGauge temperature={sensorData.temperature} />
-                <AscentDescentIndicator isAscending={sensorData.isAscending} />
+              <div className="dashboard-container">
+                <div className='top-bar'>
+                  <StatusMessage statusMessage={sensorData.statusMessage} />
+                </div>
+                <div className='mid-section mid-right'>
+                  <AltitudeChart altitude={sensorData.altitude} />
+                  <VelocityChart velocity={sensorData.velocity} />
+                </div>
+                <div className='mid-section mid-left'>
+                  <TemperatureGauge temperature={sensorData.temperature} />
+                  <AscentDescentIndicator isAscending={sensorData.isAscending} />
+                </div>
+                <div className='top-bar'>
                 <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
-                <RefreshButton onRefresh={fetchData} />
+                </div>
+              
               </div>
           } />
         </Routes>
