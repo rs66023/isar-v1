@@ -58,18 +58,49 @@ function App() {
     setUseWebSocket(!useWebSocket);
   };
 
+  // Function to handle action required
+  const handleActionRequired = () => {
+    fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/ActOnSpectrum', {
+      method: 'POST',
+      // Additional settings may be required depending on the API
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Response error');
+      }
+      console.log("Action taken");
+    })
+    .catch(error => {
+      console.error("Action error:", error);
+    });
+  };
+
   useEffect(() => {
     if (useWebSocket) {
-      const webSocket = new WebSocket('wss://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumWS');
-      webSocket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        setSensorData(data);
+      const connectWebSocket = () => {
+        const webSocket = new WebSocket('wss://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumWS');
+
+        webSocket.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          setSensorData(data);
+        };
+
+        webSocket.onerror = (error) => {
+          console.error('WebSocket Error:', error);
+          webSocket.close();
+        };
+
+        webSocket.onclose = () => {
+          console.log("WebSocket Disconnected. Attempting to reconnect...");
+          setTimeout(connectWebSocket, 5000); // Reconnect after 5 seconds
+        };
       };
-      webSocket.onerror = (error) => {
-        console.error('WebSocket Error:', error);
-      };
+
+      connectWebSocket();
       return () => {
-        webSocket.close();
+        if (webSocket) {
+          webSocket.close();
+        }
       };
     } else {
       fetchData();
@@ -77,6 +108,7 @@ function App() {
       return () => clearInterval(interval);
     }
   }, [useWebSocket, fetchData]);
+
 
   // In your component, conditionally render a loading message if isLoading is true
   return (
@@ -102,7 +134,10 @@ function App() {
                 />
               </div>
               <div className='bottom-bar'>
-                <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+                <ActionRequiredIndicator 
+                  isActionRequired={sensorData.isActionRequired}
+                  onAction={handleActionRequired} 
+                />
               </div>
             </div>
           } />
