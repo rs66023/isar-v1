@@ -30,6 +30,9 @@ function App() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [useWebSocket, setUseWebSocket] = useState(false);
+
+  // Function to fetch data
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -46,16 +49,34 @@ function App() {
     }
   };
 
-  // Implementing polling for real-time updates
-  useEffect(() => {
+  // Function to handle manual refresh
+  const handleRefresh = () => {
     fetchData();
+  };
 
-    const interval = setInterval(() => {
+  const toggleWebSocket = () => {
+    setUseWebSocket(!useWebSocket);
+  };
+
+  useEffect(() => {
+    if (useWebSocket) {
+      const webSocket = new WebSocket('wss://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumWS');
+      webSocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setSensorData(data);
+      };
+      webSocket.onerror = (error) => {
+        console.error('WebSocket Error:', error);
+      };
+      return () => {
+        webSocket.close();
+      };
+    } else {
       fetchData();
-    }, 5000); // Adjust interval as needed
-
-    return () => clearInterval(interval); // Clear interval on component unmount
-  }, []);
+      const interval = setInterval(fetchData, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [useWebSocket, fetchData]);
 
   // In your component, conditionally render a loading message if isLoading is true
   return (
@@ -63,23 +84,27 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={ 
-              <div className="dashboard-container">
-                <div className='top-bar'>
-                  <StatusMessage statusMessage={sensorData.statusMessage} />
-                </div>
-                <div className='mid-section mid-right'>
-                  <AltitudeChart altitude={sensorData.altitude} />
-                  <VelocityChart velocity={sensorData.velocity} />
-                </div>
-                <div className='mid-section mid-left'>
-                  <TemperatureGauge temperature={sensorData.temperature} />
-                  <AscentDescentIndicator isAscending={sensorData.isAscending} />
-                </div>
-                <div className='top-bar'>
-                <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
-                </div>
-              
+            <div className="dashboard-container">
+              <div className='top-bar'>
+                <StatusMessage statusMessage={sensorData.statusMessage} />
               </div>
+              <div className='mid-section-right'>
+                <VelocityChart velocity={sensorData.velocity} />
+                <AltitudeChart altitude={sensorData.altitude} />
+              </div>
+              <div className='mid-section-left'>
+                <TemperatureGauge temperature={sensorData.temperature} />
+                <AscentDescentIndicator isAscending={sensorData.isAscending} />
+                <RefreshButton
+                  onRefresh={fetchData} 
+                  toggleWebSocket={toggleWebSocket} 
+                  useWebSocket={useWebSocket} 
+                />
+              </div>
+              <div className='bottom-bar'>
+                <ActionRequiredIndicator isActionRequired={sensorData.isActionRequired} />
+              </div>
+            </div>
           } />
         </Routes>
       </div>
