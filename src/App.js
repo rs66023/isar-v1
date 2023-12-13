@@ -122,7 +122,9 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {isLoading && <div className="loading-indicator">Loading...</div>}
+        <div className="loading-indicator-container">
+          {isLoading && <div className="loading-indicator">Loading...</div>}
+        </div>
         {error && <div className="error-message">{error}</div>}
         <Routes>
           <Route path="/" element={ 

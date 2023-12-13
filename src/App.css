@@ -121,6 +121,16 @@ button:hover {
   }
 }
 
+.loading-indicator-container {
+  height: 30px;  /* Reserve space for the loading message */
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.loading-indicator {
+  color: var(--primary-color);
+}
+
 .temperature-gauge-container, .ascent-descent-indicator-container, .buttons-container {
   padding: 10px;
   margin: 5px 0;
