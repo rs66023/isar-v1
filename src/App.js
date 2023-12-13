@@ -118,7 +118,6 @@ function App() {
   }, [useWebSocket, fetchData]);
 
 
-  // In your component, conditionally render a loading message if isLoading is true
   return (
     <Router>
       <div className="App">
