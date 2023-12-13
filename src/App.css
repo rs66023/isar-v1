@@ -121,14 +121,18 @@ button:hover {
   }
 }
 
-.loading-indicator-container {
+.loading-indicator-container, .error-message-container {
   height: 30px;  /* Reserve space for the loading message */
   text-align: center;
   margin-bottom: 10px;
 }
 
-.loading-indicator {
+.loading-indicator, .error-message {
   color: var(--primary-color);
+}
+
+.error-message {
+  color: var(--danger-color);
 }
 
 .temperature-gauge-container, .ascent-descent-indicator-container, .buttons-container {

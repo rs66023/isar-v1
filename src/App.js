@@ -125,7 +125,9 @@ function App() {
         <div className="loading-indicator-container">
           {isLoading && <div className="loading-indicator">Loading...</div>}
         </div>
-        {error && <div className="error-message">{error}</div>}
+        <div className="error-message-container">
+          {error && <div className="error-message">{error}</div>}
+        </div>
         <Routes>
           <Route path="/" element={ 
             <div className="dashboard-container">
