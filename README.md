@@ -1,4 +1,56 @@
 <<<<<<< HEAD
+
+Spectrum Status Dashboard
+
+The Spectrum Status Dashboard is a React-based web application designed to visualize and monitor real-time data from the Spectrum launch vehicle. It provides ground control crews with crucial insights into various flight parameters such as velocity, altitude, and temperature, along with status updates and action-required indicators. This application is part of a broader initiative to enhance mission control capabilities and ensure successful operations.
+Features
+
+    Real-Time Data Visualization: Displays live data including velocity, altitude, and temperature using a combination of charts and gauges.
+    WebSocket Integration: Utilizes WebSocket for real-time data streaming, ensuring up-to-date information is always displayed.
+    Responsive Design: Offers a user-friendly interface adaptable to various screen sizes and devices.
+    Error Handling: Implements robust error handling to provide feedback on data fetching issues or connection problems.
+    Manual Refresh Option: Includes a manual refresh feature, allowing users to update data on demand.
+
+Technology Stack
+
+    React: Utilized for building the user interface.
+    CSS Grid and Flexbox: Used for responsive layout design.
+    WebSocket API: Employed for real-time data streaming.
+    Fetch API: Used for handling HTTP requests to the API endpoints.
+
+Getting Started
+
+To run this project locally, follow these steps:
+
+    Clone the Repository:
+
+    bash
+
+git clone https://github.com/[YourUsername]/spectrum-status-dashboard.git
+
+Navigate to the Project Directory:
+
+bash
+
+cd spectrum-status-dashboard
+
+Install Dependencies:
+
+bash
+
+npm install
+
+Run the Application:
+
+bash
+
+    npm start
+
+Contributions
+
+Contributions to the Spectrum Status Dashboard are welcome. If you have suggestions or improvements, please fork the repository and create a pull request, or open an issue with the tag "enhancement". Don't forget to give the project a star if you find it helpful!
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
