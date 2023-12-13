@@ -31,10 +31,12 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(false);
+  const [error, setError] = useState('');
 
   // Function to fetch data
   const fetchData = async () => {
     setIsLoading(true);
+    setError(''); // Reset error state
     try {
       const response = await fetch('https://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumStatus');
       if (!response.ok) {
@@ -44,6 +46,8 @@ function App() {
       setSensorData(data);
     } catch (error) {
       console.error('Error:', error);
+      setError('Failed to fetch data.'); // Set error message
+
     } finally {
       setIsLoading(false);
     }
@@ -76,6 +80,9 @@ function App() {
   };
 
   useEffect(() => {
+
+    let webSocket;
+
     if (useWebSocket) {
       const connectWebSocket = () => {
         const webSocket = new WebSocket('wss://webfrontendassignment-isaraerospace.azurewebsites.net/api/SpectrumWS');
@@ -87,6 +94,7 @@ function App() {
 
         webSocket.onerror = (error) => {
           console.error('WebSocket Error:', error);
+          setError('WebSocket connection error.'); // Set error message
           webSocket.close();
         };
 
@@ -114,30 +122,46 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {isLoading && <div className="loading-indicator">Loading...</div>}
+        {error && <div className="error-message">{error}</div>}
         <Routes>
           <Route path="/" element={ 
             <div className="dashboard-container">
+              {/* WebSocket status indicator */}
+              <div className='websocket-status'>
+                {useWebSocket ? 'WebSocket Connected' : 'WebSocket Disconnected'}
+              </div>
               <div className='top-bar'>
                 <StatusMessage statusMessage={sensorData.statusMessage} />
               </div>
-              <div className='mid-section-right'>
-                <VelocityChart velocity={sensorData.velocity} />
-                <AltitudeChart altitude={sensorData.altitude} />
-              </div>
-              <div className='mid-section-left'>
-                <TemperatureGauge temperature={sensorData.temperature} />
-                <AscentDescentIndicator isAscending={sensorData.isAscending} />
-                <RefreshButton
-                  onRefresh={fetchData} 
-                  toggleWebSocket={toggleWebSocket} 
-                  useWebSocket={useWebSocket} 
-                />
+              <div className='mid-section'>
+                <div className='left-section'>
+                  <VelocityChart velocity={sensorData.velocity} />
+                  <AltitudeChart altitude={sensorData.altitude} />
+                </div>
+                <div className='right-section'>
+                  <div className='temperature-gauge-container'>
+                    <TemperatureGauge temperature={sensorData.temperature} />
+                  </div>
+                  <div className='ascent-descent-indicator-container'>
+                    <AscentDescentIndicator isAscending={sensorData.isAscending} />
+                  </div>
+                  <div className='action-required-indicator-container'>
+                    <ActionRequiredIndicator 
+                      isActionRequired={sensorData.isActionRequired}
+                      onAction={handleActionRequired} 
+                    />
+                  </div>
+                </div>
               </div>
               <div className='bottom-bar'>
-                <ActionRequiredIndicator 
-                  isActionRequired={sensorData.isActionRequired}
-                  onAction={handleActionRequired} 
-                />
+                <div className='buttons-container'>
+                  <RefreshButton
+                    onRefresh={fetchData} 
+                    toggleWebSocket={toggleWebSocket} 
+                    useWebSocket={useWebSocket} 
+                  />
+                </div>
               </div>
             </div>
           } />
@@ -146,6 +170,7 @@ function App() {
     </Router>
   );
 }
+  
 
 
 export default App;

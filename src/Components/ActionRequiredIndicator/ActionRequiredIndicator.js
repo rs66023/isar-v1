@@ -1,5 +1,4 @@
 import React from 'react';
-import './ActionRequiredIndicator.css'; // CSS file for styling
 
 function ActionRequiredIndicator({ isActionRequired }) {
   return (

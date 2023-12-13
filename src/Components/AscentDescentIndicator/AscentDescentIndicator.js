@@ -1,5 +1,4 @@
 import React from 'react';
-import './AscentDescentIndicator.css'; // CSS file for styling
 
 function AscentDescentIndicator({ isAscending }) {
   return (

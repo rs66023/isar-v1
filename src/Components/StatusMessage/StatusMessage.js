@@ -1,5 +1,4 @@
 import React from 'react';
-import './StatusMessage.css'; // CSS file for styling
 
 function StatusMessage({ statusMessage }) {
   return (

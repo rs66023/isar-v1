@@ -1,5 +1,4 @@
 import React from 'react';
-import './TemperatureGauge.css'; // Make sure to create this CSS file
 
 function Thermometer({ temperature }) {
   // Calculate the height of the mercury based on the temperature
